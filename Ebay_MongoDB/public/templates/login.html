@@ -1,0 +1,57 @@
+<div class="container" ng-controller="ebay">
+
+	<div class="container">
+
+		<form class="afterSignIn">
+
+			<div class="panel panel-primary">
+				<div
+					style="background-image: url(/images/ebaylogo.png); height: 100px; width: 400px;">
+				</div>
+				<div class="panel-body">
+
+					<form class="form-horizontal" role="form">
+
+						<div class="form-group  usernameDiv">
+
+							<div class="col-sm-10">
+								<input type="email" class="form-control"
+									ng-model="inputUsername" name="inputUsername"
+									id="inputUsername" placeholder="Email Id">
+							</div>
+
+						</div>
+
+						<div class="form-group  usernameDiv">
+
+							<div class="col-sm-10">
+								<input type="password" class="form-control"
+									ng-model="inputPassword" name="inputPassword"
+									id="inputPassword" placeholder="Password">
+							</div>
+
+						</div>
+
+						<div class="form-group ">
+
+							<div class="pull-left signIn">
+								<button name="signin" ng-click="signin()" type="submit"
+									class="btn btn-primary">Sign in</button>
+							</div>
+
+						</div>
+
+					</form>
+
+				</div>
+				<div class="alert alert-danger" ng-hide="invalid_login">
+					<strong>Incorrect username or password</strong>
+				</div>
+			</div>
+
+		</form>
+
+	</div>
+
+
+</div>

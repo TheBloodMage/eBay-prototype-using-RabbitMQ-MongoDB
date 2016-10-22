@@ -1,0 +1,32 @@
+
+
+<div class="div-align">
+	<div>
+		<div class="table table-title">
+			<h1>Your Profile Information</h1>
+		</div>
+		<table class="table table-fill">
+			<tr>
+				<th>USERNAME</th>
+				<th>FIRST NAME</th>
+				<th>LAST NAME</th>
+				<th>BIRTHDAY</th>
+				<th>EBAY HANDLE</th>
+				<th>CONTACT INFORMATION</th>
+				<th>LOCATION</th>
+				<th>LAST LOGIN TIME</th>
+			</tr>
+			<tr ng-repeat="result in results">
+				<td>{{result.username}}</td>
+				<td>{{result.fname}}</td>
+				<td>{{result.lname}}</td>
+				<td>{{result.birthday}}</td>
+				<td>{{result.ebayhandle}}</td>
+				<td>{{result.contactinfo}}</td>
+				<td>{{result.location}}</td>
+				<td>{{result.logintime}}</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
