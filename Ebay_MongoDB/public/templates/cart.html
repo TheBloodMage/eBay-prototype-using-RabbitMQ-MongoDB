@@ -6,18 +6,16 @@
 		<table class="table table-fill">
 			<tr>
 				<th>PRODUCT NAME</th>
-				<th>PRODUCT ID</th>
 				<th>PRODUCT PRICE</th>
 				<th>PRODUCT DESCRIPTION</th>
 				<th>REMOVE FROM CART</th>
 			</tr>
 			<tr ng-repeat="cart in carts">
-				<td>{{cart.pname}}</td>
-				<td>{{cart.pid}}</td>
-				<td>{{cart.pprize}}</td>
-				<td>{{cart.pdesc}}</td>
+				<td>{{cart.product_name}}</td>
+				<td>{{cart.product_price}}</td>
+				<td>{{cart.product_desc}}</td>
 				<td><button name="ADD TO CART"
-						ng-click="removeFromCart(cart.pid)" type="submit"
+						ng-click="removeFromCart(cart._id)" type="submit"
 						class="btn btn-primary">REMOVE FROM CART</button></td>
 			</tr>
 		</table>

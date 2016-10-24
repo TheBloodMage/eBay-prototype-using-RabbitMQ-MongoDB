@@ -6,20 +6,22 @@
 		<table class="table table-fill">
 			<tr>
 				<th>PRODUCT NAME</th>
-				<th>PRODUCT ID</th>
 				<th>PRODUCT PRICE</th>
 				<th>PRODUCT DESCRIPTION</th>
 				<th>NUMBER OF PRODUCTS</th>
+				<th>OWNER NAME</th>
+				<th>OWNER CONTACT INFO</th>
 				<th>ADD TO CART</th>
 			</tr>
 			<tr ng-repeat="product in products">
-				<td>{{product.pname}}</td>
-				<td>{{product.pid}}</td>
-				<td>{{product.pprize}}</td>
-				<td>{{product.pdesc}}</td>
-				<td>{{product.totprod}}</td>
+				<td>{{product.product_name}}</td>
+				<td>{{product.product_price}}</td>
+				<td>{{product.product_desc}}</td>
+				<td>{{product.tot_product}}</td>
+				<td>{{product.product_owner_fname}}</td>
+				<td>{{product.product_owner_contact_info}}</td>
 				<td><button name="ADD TO CART"
-						ng-click="addToCart(product.pid)" type="submit"
+						ng-click="addToCart(product._id)" type="submit"
 						class="btn btn-primary">ADD TO CART</button></td>
 			</tr>
 		</table>

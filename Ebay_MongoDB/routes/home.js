@@ -1,6 +1,9 @@
 var ejs = require("ejs");
 var mysql = require('./mysql');
 var bcrypt = require('bcrypt');
+var mongo = require("./mongo");
+var ObjectId = require('mongodb').ObjectID;
+var mongoURL = "mongodb://localhost:27017/EbayDatabaseMongoDB";
 
 exports.signin = function(req, res) {
 
@@ -18,289 +21,474 @@ exports.signin = function(req, res) {
 	});
 }
 
-exports.profile = function(req, res) {
-
-	var getProfileInformation = "select u.username, p.birthday, p.ebayhandle, p.contactinfo, p.location, u.logintime from users u, "
-			+ "profile p where u.username ='" + req.session.username + "'";
-
-	console.log("PROFILE QUERY IS:" + getProfileInformation);
-	var json_response;
-
-	mysql.fetchData(function(err, results) {
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-				console.log(results);
-				json_response = {
-					"users" : results
-				};
-				res.send(json_response);
-			} else {
-				console.log("No such users found in database");
-			}
-		}
-	}, getProfileInformation);
-}
-
-exports.getAllProducts = function(req, res) {
-
-	var getAllProds = "select * from products where username <> '"
-			+ req.session.username + "'";
-
-	console.log("Query to getAllProducts is:" + getAllProds);
-
-	var json_response;
-
-	mysql.fetchData(function(err, results) {
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				var rows = results;
-				console.log(rows);
-				json_response = {
-					"products" : rows
-				};
-				res.send(json_response);
-
-			} else {
-
-				console.log("No items found in database");
-			}
-		}
-	}, getAllProds);
-}
-
-function afterSignIn(req, res) {
-
-	var dt = new Date();
-
-	var getUser = "select password from users where username='"
-			+ req.param("inputUsername") + "'";
-
-	console.log("The Query to get password:" + getUser);
-
-	mysql.fetchData(function(err, results) {
-		console.log("fetching data from SQL");
-
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				var hash = results[0].password;
-				var myPlaintextPassword = req.param("inputPassword");
-
-				console.log(hash);
-
-				if (bcrypt.compareSync(myPlaintextPassword, hash)) {
-
-					req.session.username = req.param("inputUsername");
-
-					console.log("Valid Login--User Session initialized");
-
-					json_responses = {
-						"statusCode" : 200
-					};
-					res.send(json_responses);
-				}
-			} else {
-
-				json_responses = {
-					"statusCode" : 401
-				};
-				console.log("Invalid Login");
-				res.send(json_responses);
-
-			}
-		}
-	}, getUser);
-
-	var updateLastLoginTime = "update test.users set logintime = currentlogintime, currentlogintime ='"
-			+ dt + "' where username = '" + req.param("inputUsername") + "'";
-
-	console.log("The Query to get updateLastLoginTime:" + updateLastLoginTime);
-
-	mysql.fetchData(function(err, results) {
-		console.log("fetching data from SQL");
-
-		if (err) {
-			console.log("fetching one");
-			throw err;
-		} else {
-			if (results.length > 0) {
-				console.log("fetching teo");
-				console.log("time updated");
-				json_responses = {
-					"statusCode" : 200
-				};
-				res.send(json_responses);
-
-			} else {
-
-				json_responses = {
-					"statusCode" : 401
-				};
-				console.log("Invalid Login");
-				res.send(json_responses);
-
-			}
-		}
-	}, updateLastLoginTime);
-}
-
-function registerNewUser(req, res) {
+exports.registerNewUser = function(req, res) {
 
 	const
 	saltRounds = 10;
 	const
 	myPlaintextPassword = req.param("inputPassword");
-	var dt = new Date();
 
 	var salt = bcrypt.genSaltSync(saltRounds);
 	var hash = bcrypt.hashSync(myPlaintextPassword, salt);
 
-	var insertUser = "INSERT INTO users VALUES ('" + req.param("inputUsername")
-			+ "','" + hash + "','" + req.param("first_name") + "','"
-			+ req.param("last_name") + "','" + dt + "','" + dt + "')";
+	var dt = new Date();
 
-	console.log("QUERY to register NewUser is:" + insertUser);
-	console.log(dt);
+	console.log("Inside registerNewUser; Following are the values to insert");
 
-	mysql.fetchData(function(err, results) {
+	var first_name = req.param("first_name");
+	var last_name = req.param("last_name");
+	var inputUsername = req.param("inputUsername");
+	var inputPassword = hash;
 
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('login');
+		var collprofile = mongo.collection('profile');
 
-				console.log("Record NOT inserted!");
+		coll.findOne({
+			username : inputUsername
+		}, function(err, user) {
+			if (user) {
+				console.log("user already exists false");
 				json_responses = {
-					"statusCode" : 200
+					"statusCode" : 402
 				};
 				res.send(json_responses);
-
 			} else {
+				coll.insert({
+					username : inputUsername,
+					password : hash,
+					fname : first_name,
+					lname : last_name,
+					logintime : dt,
+					currentlogintime : dt
 
-				console.log("Record Inserted");
-				json_responses = {
-					"statusCode" : 401
-				};
-				res.send(json_responses);
+				}, function(err, user) {
+					if (user) {
+						// This way subsequent requests will know the user is
+						// logged in.
+						req.session.username = user.username;
+						console.log(req.session.username + " is the session");
+						json_responses = {
+							"statusCode" : 200
+						};
+						res.send(json_responses);
 
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						res.send(json_responses);
+					}
+				});
+
+				collprofile.insert({
+					username : inputUsername,
+					password : hash,
+					fname : first_name,
+					lname : last_name,
+					logintime : dt,
+					currentlogintime : dt,
+					birthday : "",
+					ebay_handle : "",
+					contact_info : "",
+					location : ""
+
+				}, function(err, user) {
+					if (user) {
+						// This way subsequent requests will know the user is
+						// logged in.
+						req.session.username = user.username;
+						console.log(req.session.username + " is the session");
+						json_responses = {
+							"statusCode" : 200
+						};
+						res.send(json_responses);
+
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						res.send(json_responses);
+					}
+				});
 			}
-		}
-	}, insertUser);
 
+		});
+
+	});
 }
 
-exports.submitAd = function(req, res) {
+exports.afterSignIn = function(req, res) {
 
-	var insertUser = "INSERT INTO products VALUES ('"
-			+ req.param("product_name") + "','" + req.param("product_id")
-			+ "','" + req.param("product_price") + "','"
-			+ req.param("product_desc") + "','" + req.session.username + "','"
-			+ req.param("tot_product") + "')";
+	var dt = new Date();
+	var username = req.param("inputUsername");
+	var myPlaintextPassword = req.param("inputPassword");
 
-	console.log("QUERY to submit an AD is:" + insertUser);
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo at: ' + mongoURL);
+		var coll = mongo.collection('login');
 
-	mysql.fetchData(function(err, results) {
+		coll.findOne({
+			username : username
+		}, function(err, user) {
+			if (user) {
+				var password = user.password;
+				console.log("The password is: " + password);
+				console.log("The username is: " + username);
 
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
+				if (bcrypt.compareSync(myPlaintextPassword, password)) {
 
-				console.log("AD NOT inserted!");
-				json_responses = {
-					"statusCode" : 200
-				};
-				res.send(json_responses);
+					// This way subsequent requests will know the user is logged
+					req.session.username = user.username;
+					console.log(req.session.username + " is the session");
 
+					json_responses = {
+						"statusCode" : 200
+					};
+					res.send(json_responses);
+				} else {
+					console.log("returned false");
+					json_responses = {
+						"statusCode" : 401
+					};
+					res.send(json_responses);
+				}
 			} else {
-
-				console.log("AD Inserted");
+				console.log("returned false");
 				json_responses = {
 					"statusCode" : 401
 				};
 				res.send(json_responses);
+			}
+		});
+	});
+}
+
+exports.profile = function(req, res) {
+
+	var username = req.session.username;
+
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo in: exports.profile at' + mongoURL);
+		var coll = mongo.collection('profile');
+
+		coll.findOne({
+			username : username
+		}, function(err, user) {
+			if (user) {
+
+				json_responses = {
+					"users" : JSON.parse("[" + JSON.stringify(user) + "]")
+				};
+				console.log(json_responses);
+				res.send(json_responses);
 
 			}
-		}
-	}, insertUser);
+		});
+
+	});
 }
 
 exports.updateProfile = function(req, res) {
 
-	/*
-	 * var profileQuery = "INSERT INTO profile VALUES ('" + req.session.username +
-	 * "','" + req.param("bday") + "','" + req.param("euname") + "','" +
-	 * req.param("cinfo") + "','" + req.param("location") + "')";
-	 */
+	console.log("Inside updateProfile; Following are the values to UPDATE");
 
-	var profileQuery = "update profile set birthday = '" + req.param("bday")
-			+ "', ebayhandle= '" + req.param("euname") + "', contactinfo= '"
-			+ req.param("cinfo") + "', location= '" + req.param("location")
-			+ "' where username = '" + req.session.username + "'";
+	var fname = req.param("first_name");
+	var lname = req.param("last_name");
+	var birthday = req.param("bday");
+	var ebay_handle = req.param("ehandle");
+	var contact_info = req.param("cinfo");
+	var location = req.param("location");
+	var username = req.session.username;
 
-	var userQuery = "update users set fname = '" + req.param("first_name")
-			+ "', lname= '" + req.param("last_name") + "' where username = '"
-			+ req.session.username + "'";
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo insode updateProfile at: ' + mongoURL);
+		var collection_profile = mongo.collection('profile');
+		var collection_products = mongo.collection('products');
 
-	console.log("QUERY to modify table PROFILE is::" + profileQuery);
-	console.log("QUERY to modify table USER is::" + userQuery);
+		collection_profile.update({
+			username : username
+		}, {
+			$set : {
+				birthday : birthday,
+				ebay_handle : ebay_handle,
+				contact_info : contact_info,
+				location : location,
+				fname : fname,
+				lname : lname
+			}
+		},
 
-	mysql.fetchData(function(err, results) {
-
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				console.log("PROFILE UPDATE FAIL!");
+		function(err, user) {
+			if (user) {
 				json_responses = {
 					"statusCode" : 200
 				};
 				res.send(json_responses);
 
 			} else {
-
-				console.log("PROFILE UPDATE SUCCESS");
+				console.log("returned false");
 				json_responses = {
 					"statusCode" : 401
 				};
 				res.send(json_responses);
-
 			}
-		}
-	}, profileQuery);
+		});
 
-	mysql.fetchData(function(err, results) {
+		collection_products.updateMany({
+			username : username
+		}, {
+			$set : {
+				product_owner_fname : fname,
+				product_owner_lname : lname,
+				product_owner_location : location,
+				product_owner_contact_info : contact_info
+			}
+		},
 
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				console.log("USER UPDATE FAIL!");
+		function(err, user) {
+			if (user) {
 				json_responses = {
 					"statusCode" : 200
 				};
 				res.send(json_responses);
 
 			} else {
-
-				console.log("USER UPDATE SUCCESS");
+				console.log("returned false");
 				json_responses = {
 					"statusCode" : 401
 				};
 				res.send(json_responses);
-
 			}
-		}
-	}, userQuery);
+		});
+
+	});
+}
+
+exports.getAllProducts = function(req, res) {
+
+	console.log("inside getAllProducts");
+	var username = req.session.username;
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo at: ' + mongoURL);
+
+		var coll = mongo.collection('products');
+		var json_response;
+
+		coll.find({
+			username : {
+				$ne : username
+			}
+		}).toArray(function(err, items) {
+
+			json_response = {
+				"products" : items
+			};
+			console.log(json_response);
+			res.send(json_response);
+
+		});
+	});
+}
+
+exports.submitAd = function(req, res) {
+
+	var product_name = req.param("product_name");
+	var product_desc = req.param("product_desc");
+	var product_price = req.param("product_price");
+	var tot_product = req.param("tot_product");
+	var username = req.session.username;
+
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo insode submitAd at: ' + mongoURL);
+		var collection_products = mongo.collection('products');
+		var collection_profile = mongo.collection('profile');
+
+		collection_profile.findOne({
+			username : username
+		}, function(err, user) {
+			if (user) {
+				var product_owner_fname = user.fname;
+				var product_owner_lname = user.lname;
+				var product_owner_location = user.location;
+				var product_owner_contact_info = user.contact_info;
+
+				collection_products.insert({
+					product_name : product_name,
+					product_desc : product_desc,
+					product_price : product_price,
+					tot_product : tot_product,
+					username : username,
+					product_owner_fname : product_owner_fname,
+					product_owner_lname : product_owner_lname,
+					product_owner_location : product_owner_location,
+					product_owner_contact_info : product_owner_contact_info
+
+				}, function(err, user) {
+					if (user) {
+						json_responses = {
+							"statusCode" : 200
+						};
+						res.send(json_responses);
+
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						res.send(json_responses);
+					}
+				});
+			}
+		});
+
+	});
+}
+
+exports.managesellitems = function(req, res) {
+
+	console.log("inside managesellitems");
+	var username = req.session.username;
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo at: ' + mongoURL);
+
+		var collection_products = mongo.collection('products');
+		var json_response;
+
+		collection_products.find({
+			username : {
+				$eq : username
+			}
+		}).toArray(function(err, items) {
+
+			json_response = {
+				"ads" : items
+			};
+			console.log(json_response);
+			res.send(json_response);
+
+		});
+	});
+
+}
+
+exports.cart = function(req, res) {
+
+	var product_id = req.param("pid");
+	var username = req.session.username;
+
+	console.log("product_id: " + product_id);
+	console.log("username: " + username);
+
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo insode cart at: ' + mongoURL);
+		var collection_products = mongo.collection('products');
+		var collection_cart = mongo.collection('cart');
+
+		collection_products.findOne({
+			_id : ObjectId(product_id)
+		}, function(err, user) {
+			if (user) {
+				var product_name = user.product_name;
+				var product_price = user.product_price;
+				var product_desc = user.product_desc;
+
+				console.log("product_name: " + product_name);
+				console.log("product_price: " + product_price);
+				console.log("product_desc: " + product_desc);
+
+				collection_cart.insert({
+					username : username,
+					product_name : product_name,
+					product_price : product_price,
+					product_desc : product_desc
+
+				}, function(err, user) {
+					if (user) {
+						json_responses = {
+							"statusCode" : 200
+						};
+						res.send(json_responses);
+
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						res.send(json_responses);
+					}
+				});
+			}
+		});
+
+	});
+
+}
+
+exports.yourCart = function(req, res) {
+
+	console.log("inside yourCart");
+	var username = req.session.username;
+
+	console.log("username: " + username);
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo at: ' + mongoURL);
+
+		var collection_cart = mongo.collection('cart');
+		var json_response;
+
+		collection_cart.find({
+			username : {
+				$eq : username
+			}
+		}).toArray(function(err, items) {
+
+			json_response = {
+				"carts" : items
+			};
+			console.log(json_response);
+			res.send(json_response);
+
+		});
+	});
+}
+
+exports.removeCart = function(req, res) {
+
+	console.log("inside removeCart");
+	var username = req.session.username;
+	var product_id = req.param("pid");
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo at: ' + mongoURL);
+
+		var collection_cart = mongo.collection('cart');
+		var json_response;
+
+		collection_cart.remove({
+			_id : {
+				$eq : ObjectId(product_id)
+			}
+		}), (function(err, items) {
+
+			json_response = {
+				"carts" : items
+			};
+			console.log(json_response);
+			res.send(json_response);
+
+		});
+	});
 }
 
 exports.money = function(req, res) {
@@ -454,151 +642,6 @@ exports.getAllBoughtProducts = function(req, res) {
 	}, getAllUsers);
 }
 
-exports.redirectToHomepage = function(req, res) {
-
-	console.log("ME: " + req.session.username);
-
-	if (req.session.username) {
-		res
-				.header(
-						'Cache-Control',
-						'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
-		res.render("successLogin", {
-			username : req.session.username
-		});
-	} else {
-		res.redirect('/');
-	}
-};
-
-exports.logout = function(req, res) {
-	console.log("in destroy session function");
-	req.session.destroy();
-	res.redirect('/');
-};
-
-exports.cart = function(req, res) {
-
-	var cartQuery = "INSERT INTO cart VALUES ('" + req.param("pid") + "','"
-			+ req.session.username + "')";
-
-	console.log("QUERY for inserting in CART is:" + cartQuery);
-
-	mysql.fetchData(function(err, results) {
-
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				console.log("CART FAIL!");
-				json_responses = {
-					"statusCode" : 200
-				};
-				res.send(json_responses);
-
-			} else {
-
-				console.log("CART SUCCSS!");
-				json_responses = {
-					"statusCode" : 401
-				};
-				res.send(json_responses);
-
-			}
-		}
-	}, cartQuery);
-}
-
-exports.yourCart = function(req, res) {
-
-	var yourCartItems = "select * from products p, cart c where p.pid =  c.pid and c.username = '"
-			+ req.session.username + "'";
-
-	console.log("Query to select cart items is:" + yourCartItems);
-	var json_response;
-
-	mysql.fetchData(function(err, results) {
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				var rows = results;
-				console.log(rows);
-				json_response = {
-					"carts" : rows
-				};
-				res.send(json_response);
-
-			} else {
-				console.log("No item found in cart");
-			}
-		}
-	}, yourCartItems);
-}
-
-exports.yourAd = function(req, res) {
-
-	var getAllUsers = "select * from products where username = '"
-			+ req.session.username + "'";
-
-	console.log("Query to select your ADs is:" + getAllUsers);
-	var json_response;
-
-	mysql.fetchData(function(err, results) {
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				var rows = results;
-				console.log(rows);
-				json_response = {
-					"ads" : rows
-				};
-				res.send(json_response);
-
-			} else {
-				console.log("No ADs under your name");
-			}
-		}
-	}, getAllUsers);
-}
-
-exports.removeCart = function(req, res) {
-
-	var deleteCart = "DELETE FROM test.cart WHERE pid =" + req.param("pid")
-			+ " and username = '" + req.session.username + "'";
-
-	console.log("QUERY for deleting item from cart is" + deleteCart);
-
-	mysql.fetchData(function(err, results) {
-
-		if (err) {
-			throw err;
-		} else {
-			if (results.length > 0) {
-
-				console.log("CART deletion fail!");
-				json_responses = {
-					"statusCode" : 200
-				};
-				res.send(json_responses);
-
-			} else {
-
-				console.log("CART deletion success!");
-				json_responses = {
-					"statusCode" : 401
-				};
-				res.send(json_responses);
-
-			}
-		}
-	}, deleteCart);
-}
-
 exports.removeAd = function(req, res) {
 
 	var insertUser = "DELETE FROM products WHERE username='"
@@ -630,7 +673,7 @@ exports.removeAd = function(req, res) {
 			}
 		}
 	}, insertUser);
-}
+};
 
 exports.calculate = function(req, res) {
 
@@ -661,5 +704,26 @@ exports.calculate = function(req, res) {
 	}, getAllUsers);
 }
 
-exports.afterSignIn = afterSignIn;
-exports.registerNewUser = registerNewUser;
+// Redirects to the homepage
+exports.redirectToHomepage = function(req, res) {
+	// Checks before redirecting whether the session is valid
+	if (req.session.username) {
+		// Set these headers to notify the browser not to maintain any cache for
+		// the page being loaded
+		res
+				.header(
+						'Cache-Control',
+						'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
+		res.render("successLogin", {
+			username : req.session.username
+		});
+	} else {
+		res.redirect('/');
+	}
+};
+
+exports.logout = function(req, res) {
+	console.log("in destroy session function");
+	req.session.destroy();
+	res.redirect('/');
+};

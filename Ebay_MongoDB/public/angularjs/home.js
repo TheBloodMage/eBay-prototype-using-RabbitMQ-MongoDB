@@ -24,35 +24,48 @@ app.config(function($routeProvider) {
 		templateUrl : "templates/profile.html",
 		controller : "profileController"
 	})
-	
-	.when("/cart", {
-		templateUrl : "templates/cart.html",
-		controller : "cartController"
+
+	.when("/update", {
+		templateUrl : "templates/update.html"
+	})
+
+	.when("/sell", {
+		templateUrl : "templates/sell.html"
+	})
+
+	.when("/managesellitems", {
+		templateUrl : "templates/managesellitems.html",
+		controller : "managesellitemsController"
 	})
 	
 	.when("/buy", {
 		templateUrl : "templates/buy.html",
 		controller : "buyController"
+	})
+
+	.when("/cart", {
+		templateUrl : "templates/cart.html",
+		controller : "cartController"
 	});
 });
 
-//login
+// login
 app.controller('ebay', function($scope, $http) {
-	
+
 	console.log("I am in ebay controller");
 	$scope.invalid_login = true;
 
 	$scope.signin = function() {
-		
+
 		console.log("Sign in button clicked");
-		
+
 		var credentials = {
 			"inputUsername" : $scope.inputUsername,
 			"inputPassword" : $scope.inputPassword
 		}
-		
+
 		console.log(credentials);
-		
+
 		$http({
 			method : "POST",
 			url : '/afterSignIn',
@@ -66,7 +79,7 @@ app.controller('ebay', function($scope, $http) {
 				console.log("render the Invalid LogIn Message here");
 				$scope.invalid_login = false;
 			}
-			
+
 		})
 	}
 
@@ -84,98 +97,108 @@ app.controller('ebay', function($scope, $http) {
 
 });
 
-//register
-app.controller('register', function($scope, $http) {
-	
-	console.log("I am in register controller");
-	$scope.invalid_login = true;
-	$scope.valid_login = true;
+// register
+app
+		.controller(
+				'register',
+				function($scope, $http) {
 
-	$scope.register = function() {
-		
-		console.log("Register button clicked");
-		
-		var RegisterCredentials = {
-			"first_name" 	: $scope.first_name,
-			"last_name" 	: $scope.last_name,
-			"inputUsername" : $scope.inputUsername,
-			"inputPassword" : $scope.inputPassword,
-			"confirmPassword": $scope.confirmPassword
-		}
-		
-		if(RegisterCredentials.inputPassword == RegisterCredentials.confirmPassword){
-			console.log(RegisterCredentials.inputPassword);
-			console.log(RegisterCredentials.confirmPassword);
-			console.log("if both inserted passwords are equal");
-			$http({
-				method : "POST",
-				url : '/registerNewUser',
-				data : RegisterCredentials
-			}).success(function(data) {
-
-				if (data.statusCode == 200) {
-					console.log("invalid entry received");
-					$scope.invalid_login = false;
-				} else {
-					console.log("record inserted");
+					console.log("I am in register controller");
 					$scope.invalid_login = true;
-					$scope.valid_login = false;
-				}
-			})
-		}
-		else{
-			$scope.invalid_login = false;
-		}
+					$scope.valid_login = true;
+					$scope.already_exists = true;
 
-}
+					$scope.register = function() {
 
-	$scope.submitAd = function() {
-		var ProductDetails = {
-			"product_id" : $scope.product_id,
-			"product_name" : $scope.product_name,
-			"product_desc" : $scope.product_desc,
-			"product_price" : $scope.product_price,
-			"tot_product" : $scope.tot_product
-		}
-		console.log(ProductDetails);
-		$http({
-			method : "POST",
-			url : '/submitAd',
-			data : ProductDetails
-		}).success(function(data) {
+						console.log("Register button clicked");
 
-			if (data.statusCode == 200) {
-				console.log("invalid entry received");
-			} else {
-				console.log("record inserted");
-			}
-		})
-	}
+						var RegisterCredentials = {
+							"first_name" : $scope.first_name,
+							"last_name" : $scope.last_name,
+							"inputUsername" : $scope.inputUsername,
+							"inputPassword" : $scope.inputPassword,
+							"confirmPassword" : $scope.confirmPassword
+						}
 
-	$scope.updateProfile = function() {
-		var ProfileDetails = {
-			"first_name" : $scope.first_name,
-			"last_name" : $scope.last_name,
-			"bday" : $scope.bday,
-			"euname" : $scope.euname,
-			"cinfo" : $scope.cinfo,
-			"location" : $scope.location
-		}
-		console.log(ProfileDetails);
-		$http({
-			method : "POST",
-			url : '/updateProfile',
-			data : ProfileDetails
-		}).success(function(data) {
+						if (RegisterCredentials.inputPassword == RegisterCredentials.confirmPassword) {
+							console.log(RegisterCredentials.inputPassword);
+							console.log(RegisterCredentials.confirmPassword);
+							console.log("if both inserted passwords are equal");
+							$http({
+								method : "POST",
+								url : '/registerNewUser',
+								data : RegisterCredentials
+							}).success(function(data) {
 
-			if (data.statusCode == 200) {
-				console.log("invalid entry received");
-			} else {
-				console.log("profile updated");
-			}
-		})
-	}
-});
+								if (data.statusCode == 200) {
+									console.log("record inserted");
+									$scope.invalid_login = true;
+									$scope.already_exists = true;
+									$scope.valid_login = false;
+								} else if (data.statusCode == 401) {
+									console.log("invalid entry received");
+									$scope.valid_login = true;
+									$scope.already_exists = true;
+									$scope.invalid_login = false;
+								} else {
+									console.log("user already exists");
+									$scope.already_exists = false;
+									$scope.invalid_login = true;
+									$scope.valid_login = true;
+								}
+							})
+						} else {
+							$scope.invalid_login = false;
+						}
+					}
+
+					$scope.updateProfile = function() {
+						var ProfileDetails = {
+							"first_name" : $scope.first_name,
+							"last_name" : $scope.last_name,
+							"bday" : $scope.bday,
+							"ehandle" : $scope.euname,
+							"cinfo" : $scope.cinfo,
+							"location" : $scope.location
+						}
+						console.log(ProfileDetails);
+						$http({
+							method : "POST",
+							url : '/updateProfile',
+							data : ProfileDetails
+						}).success(function(data) {
+
+							if (data.statusCode == 200) {
+								console.log("invalid entry received");
+							} else {
+								console.log("profile updated");
+							}
+						})
+					}
+
+					$scope.submitAd = function() {
+						var ProductDetails = {
+							"product_name" : $scope.product_name,
+							"product_desc" : $scope.product_desc,
+							"product_price" : $scope.product_price,
+							"tot_product" : $scope.tot_product
+						}
+						console.log(ProductDetails);
+						$http({
+							method : "POST",
+							url : '/submitAd',
+							data : ProductDetails
+						}).success(function(data) {
+
+							if (data.statusCode == 200) {
+								console.log("invalid entry received");
+							} else {
+								console.log("record inserted");
+							}
+						})
+					}
+
+				});
 
 app.controller("profileController", function($scope, $http) {
 	console.log("I am in profileController");
@@ -207,12 +230,12 @@ app.controller("buyController", function($scope, $http) {
 	});
 });
 
-app.controller("checkController", function($scope, $http) {
-	console.log("I am in checkController");
+app.controller("managesellitemsController", function($scope, $http) {
+	console.log("I am in managesellitemsController");
 
 	$http({
 		method : "get",
-		url : '/yourAd',
+		url : '/managesellitems',
 		data : {}
 	}).success(function(data) {
 		console.log(data);
@@ -335,13 +358,7 @@ app.controller("BroughtProductsController", function($scope, $http) {
 	});
 });
 
-
-
-
-
 app.controller("aboutController", function($scope) {
 	console.log("I am in aboutController");
 	$scope.message = 'My TEST is successful';
 });
-
-
