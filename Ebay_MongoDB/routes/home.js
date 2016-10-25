@@ -1,5 +1,6 @@
 var ejs = require("ejs");
 var mysql = require('./mysql');
+var bid = require('./bid');
 var bcrypt = require('bcrypt');
 var mongo = require("./mongo");
 var ObjectId = require('mongodb').ObjectID;
@@ -296,6 +297,34 @@ exports.getAllProducts = function(req, res) {
 	});
 }
 
+exports.getAllBids = function(req, res) {
+
+	console.log("inside getAllBids");
+	var username = req.session.username;
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo at: ' + mongoURL);
+
+		var collection_bid = mongo.collection('bid');
+		var json_response;
+
+		collection_bid.find({
+			username : {
+				$ne : username
+			}
+		}).toArray(function(err, items) {
+
+			json_response = {
+				"products" : items
+			};
+			console.log(json_response);
+			res.send(json_response);
+
+		});
+	});
+}
+
 exports.submitAd = function(req, res) {
 
 	var product_name = req.param("product_name");
@@ -432,6 +461,63 @@ exports.cart = function(req, res) {
 
 }
 
+exports.bid = function(req, res) {
+
+	var product_id = req.param("pid");
+	var username = req.session.username;
+	var product_bid = req.param("product_bid");
+
+	console.log("product_id: " + product_id);
+	console.log("username: " + username);
+	console.log("product_bid: " + product_bid);
+
+	mongo.connect(mongoURL, function() {
+
+		console.log('Connected to mongo insode bid at: ' + mongoURL);
+		var collection_bid = mongo.collection('bid');
+
+		collection_bid.findOne({
+			_id : ObjectId(product_id)
+		}, function(err, user) {
+			if (user) {
+				var current_highest_bid = user.current_highest_bid;
+
+				console.log("current_highest_bid: " + current_highest_bid);
+				console.log("product_bid: " + product_bid);
+
+				if (product_bid > current_highest_bid) {
+					collection_bid.update({
+						_id : ObjectId(product_id)
+					}, {
+						$set : {
+							current_highest_bid : product_bid,
+							current_highest_bidder : username
+						}
+					},
+
+					function(err, user) {
+						if (user) {
+							json_responses = {
+								"statusCode" : 200
+							};
+							res.send(json_responses);
+
+						} else {
+							console.log("returned false");
+							json_responses = {
+								"statusCode" : 401
+							};
+							res.send(json_responses);
+						}
+					});
+				}
+			}
+
+		})
+	});
+
+}
+
 exports.yourCart = function(req, res) {
 
 	console.log("inside yourCart");
@@ -488,6 +574,73 @@ exports.removeCart = function(req, res) {
 			res.send(json_response);
 
 		});
+	});
+}
+
+exports.submitBid = function(req, res) {
+
+	var product_name = req.param("product_name");
+	var product_desc = req.param("product_desc");
+	var product_price = req.param("product_price");
+	var username = req.session.username;
+	var sessionStartTime = Math.floor(Date.now() / 1000);
+	//number of seconds in 4 days are 345600
+	var sessionEndTime = sessionStartTime + 345600;
+	
+
+	console.log("product_name: " + product_name);
+	console.log("product_desc: " + product_desc);
+	console.log("product_price: " + product_price);
+	console.log("username: " + username);
+	console.log("sessionStartTime: " + sessionStartTime);
+	console.log("sessionEndTime: " + sessionEndTime);
+
+	mongo.connect(mongoURL, function() {
+		console.log('Connected to mongo insode submitAd at: ' + mongoURL);
+		var collection_bid = mongo.collection('bid');
+		var collection_profile = mongo.collection('profile');
+
+		collection_profile.findOne({
+			username : username
+		}, function(err, user) {
+			if (user) {
+				var product_owner_fname = user.fname;
+				var product_owner_lname = user.lname;
+				var product_owner_location = user.location;
+				var product_owner_contact_info = user.contact_info;
+
+				collection_bid.insert({
+					product_name : product_name,
+					product_desc : product_desc,
+					product_price : product_price,
+					username : username,
+					product_owner_fname : product_owner_fname,
+					product_owner_lname : product_owner_lname,
+					product_owner_location : product_owner_location,
+					product_owner_contact_info : product_owner_contact_info,
+					current_highest_bid : product_price,
+					current_highest_bidder : username,
+					session_start_time : sessionStartTime,
+					session_end_time : sessionEndTime
+
+				}, function(err, user) {
+					if (user) {
+						json_responses = {
+							"statusCode" : 200
+						};
+						res.send(json_responses);
+
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						res.send(json_responses);
+					}
+				});
+			}
+		});
+
 	});
 }
 

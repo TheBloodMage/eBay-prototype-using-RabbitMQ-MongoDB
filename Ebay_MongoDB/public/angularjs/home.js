@@ -21,8 +21,8 @@ app.config(function($routeProvider) {
 	})
 
 	.when("/profile", {
-		templateUrl : "templates/profile.html",
-		controller : "profileController"
+		templateUrl	: "templates/profile.html",
+		controller	: "profileController"
 	})
 
 	.when("/update", {
@@ -32,20 +32,29 @@ app.config(function($routeProvider) {
 	.when("/sell", {
 		templateUrl : "templates/sell.html"
 	})
+	
+	.when("/bid", {
+		templateUrl : "templates/bid.html"
+	})
 
 	.when("/managesellitems", {
-		templateUrl : "templates/managesellitems.html",
-		controller : "managesellitemsController"
+		templateUrl	: "templates/managesellitems.html",
+		controller	: "managesellitemsController"
 	})
 	
-	.when("/buy", {
-		templateUrl : "templates/buy.html",
-		controller : "buyController"
+	.when("/buyproducts", {
+		templateUrl	: "templates/buy.html",
+		controller	: "buyproductsController"
+	})
+	
+	.when("/bidproducts", {
+		templateUrl	: "templates/bidpage.html",
+		controller	: "bidproductsController"
 	})
 
 	.when("/cart", {
-		templateUrl : "templates/cart.html",
-		controller : "cartController"
+		templateUrl	: "templates/cart.html",
+		controller	: "cartController"
 	});
 });
 
@@ -178,16 +187,38 @@ app
 
 					$scope.submitAd = function() {
 						var ProductDetails = {
-							"product_name" : $scope.product_name,
-							"product_desc" : $scope.product_desc,
+							"product_name"	: $scope.product_name,
+							"product_desc"	: $scope.product_desc,
 							"product_price" : $scope.product_price,
-							"tot_product" : $scope.tot_product
+							"tot_product"	: $scope.tot_product
 						}
 						console.log(ProductDetails);
 						$http({
 							method : "POST",
 							url : '/submitAd',
 							data : ProductDetails
+						}).success(function(data) {
+
+							if (data.statusCode == 200) {
+								console.log("invalid entry received");
+							} else {
+								console.log("record inserted");
+							}
+						})
+					}
+					
+					
+					$scope.submitBid = function() {
+						var BidProductDetails = {
+							"product_name"	: $scope.product_name,
+							"product_desc"	: $scope.product_desc,
+							"product_price" : $scope.product_price
+						}
+						console.log(BidProductDetails);
+						$http({
+							method : "POST",
+							url : '/submitBid',
+							data : BidProductDetails
 						}).success(function(data) {
 
 							if (data.statusCode == 200) {
@@ -215,12 +246,28 @@ app.controller("profileController", function($scope, $http) {
 
 });
 
-app.controller("buyController", function($scope, $http) {
-	console.log("I am in buyController");
+app.controller("buyproductsController", function($scope, $http) {
+	console.log("I am in buyproductsController");
 
 	$http({
 		method : "get",
 		url : '/getAllProducts',
+		data : {}
+	}).success(function(data) {
+		console.log(data);
+		$scope.products = data.products;
+	}).error(function(error) {
+
+	});
+});
+
+
+app.controller("bidproductsController", function($scope, $http) {
+	console.log("I am in bidproductsController");
+
+	$http({
+		method : "get",
+		url : '/getAllBids',
 		data : {}
 	}).success(function(data) {
 		console.log(data);
@@ -341,6 +388,29 @@ app.controller('cart', function($scope, $http) {
 			}
 		})
 	}
+	
+	$scope.placeYourBid = function(id, bid) {
+		var bid_credentials = {
+			"pid" : bid,
+			"product_bid" : id
+		}
+		console.log(bid_credentials);
+		$http({
+			method : "POST",
+			url : '/bid',
+			data : bid_credentials
+		}).success(function(data) {
+
+			if (data.statusCode == 200) {
+				console.log("Added TO BID");
+				// console.log(data);
+			} else {
+				console.log("SOMETHING WENT WRONG");
+			}
+		})
+	}
+	
+	
 });
 
 app.controller("BroughtProductsController", function($scope, $http) {

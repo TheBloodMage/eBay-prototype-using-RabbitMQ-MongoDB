@@ -76,12 +76,15 @@ app.get('/profile'			, home.profile);
 app.get('/getAllProducts'	, home.getAllProducts);
 app.get('/managesellitems'	, home.managesellitems);
 app.get('/yourCart'			, home.yourCart);
+app.get('/getAllBids'		, home.getAllBids);
 //POST
 app.post('/afterSignIn'		, home.afterSignIn);
 app.post('/updateProfile'	, home.updateProfile);
 app.post('/submitAd'		, home.submitAd);
 app.post('/cart'			, home.cart);
 app.post('/removeCart'		, home.removeCart);
+app.post('/submitBid'		, home.submitBid);
+app.post('/bid'				, home.bid);
 
 
 

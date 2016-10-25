@@ -1,0 +1,48 @@
+<div ng-controller="cart">
+	<div>
+
+		<div class="table table-title">
+			<h2>BID Following</h2>
+		</div>
+		<table class="table table-fill">
+			<tr>
+				<th>PRODUCT NAME</th>
+				<th>PRODUCT DESCRIPTION</th>
+				<th>PRODUCT BASE PRICE</th>
+				<th>CURRENT HIGHEST BID</th>
+				<th>CURRENT HIGHEST BIDDER</th>
+				<th>PRODUCT OWNER</th>
+				<th>PRODUCT OWNER CONTACT INFO</th>
+				<th>ADD YOUR BID</th>
+			</tr>
+			<tr ng-repeat="product in products">
+				<td>{{product.product_name}}</td>
+				<td>{{product.product_desc}}</td>
+				<td>{{product.product_price}}</td>
+				<td>{{product.current_highest_bid}}</td>
+				<td>{{product.current_highest_bidder}}</td>
+				<td>{{product.username}}</td>
+				<td>{{product.product_owner_contact_info}}</td>
+				<td>
+					<div>
+						<form role="form">
+							<div class="form-group">
+								<input type="text" ng-model="product.product_bid" name="product_bid"
+									id="product_bid" class="form-control input-sm"
+									placeholder="Place Your BID">
+							</div>
+
+
+							<!-- 						<button name="ADD TO BID" ng-click="placeYourBid(product._id)"
+							type="submit" class="btn btn-primary">PLACE YOUR BID</button> -->
+
+							<input type="submit" ng-click="placeYourBid(product.product_bid, product._id)"
+								value="PLACE YOUR BI  gD" class="btn btn-info btn-block">
+						</form>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+</div>
