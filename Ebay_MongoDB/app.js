@@ -75,8 +75,11 @@ app.get('/home'				, home.signin);
 app.get('/profile'			, home.profile);
 app.get('/getAllProducts'	, home.getAllProducts);
 app.get('/managesellitems'	, home.managesellitems);
+app.get('/managebiditems'	, home.managebiditems);
 app.get('/yourCart'			, home.yourCart);
 app.get('/getAllBids'		, home.getAllBids);
+app.get('/boughthistory'	, home.boughthistory);
+app.get('/soldhistory'		, home.soldhistory);
 //POST
 app.post('/afterSignIn'		, home.afterSignIn);
 app.post('/updateProfile'	, home.updateProfile);
@@ -85,6 +88,7 @@ app.post('/cart'			, home.cart);
 app.post('/removeCart'		, home.removeCart);
 app.post('/submitBid'		, home.submitBid);
 app.post('/bid'				, home.bid);
+app.post('/removeYourBidAD'	, home.removeYourBidAD);
 
 
 
@@ -95,7 +99,7 @@ app.post('/money', home.money);
 app.post('/logout', home.logout);
 
 
-app.post('/removeAd', home.removeAd);
+
 
 app.get('/getAllBoughtProducts', home.getAllBoughtProducts);
 app.get('/successLogin', home.redirectToHomepage);

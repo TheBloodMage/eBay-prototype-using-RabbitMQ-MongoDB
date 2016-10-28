@@ -42,9 +42,24 @@ app.config(function($routeProvider) {
 		controller	: "managesellitemsController"
 	})
 	
+	.when("/managebiditems", {
+		templateUrl	: "templates/managebiditems.html",
+		controller	: "managebiditemsController"
+	})
+	
 	.when("/buyproducts", {
 		templateUrl	: "templates/buy.html",
 		controller	: "buyproductsController"
+	})
+	
+	.when("/boughthistory", {
+		templateUrl	: "templates/boughthistory.html",
+		controller	: "boughthistoryController"
+	})
+	
+	.when("/soldhistory", {
+		templateUrl	: "templates/soldhistory.html",
+		controller	: "soldhistoryController"
 	})
 	
 	.when("/bidproducts", {
@@ -292,6 +307,53 @@ app.controller("managesellitemsController", function($scope, $http) {
 	});
 });
 
+app.controller("managebiditemsController", function($scope, $http) {
+	console.log("I am in managebiditemscontroller");
+
+	$http({
+		method : "get",
+		url : '/managebiditems',
+		data : {}
+	}).success(function(data) {
+		console.log(data);
+		$scope.ads = data.ads;
+	}).error(function(error) {
+
+	});
+});
+
+
+app.controller("boughthistoryController", function($scope, $http) {
+	console.log("I am in boughthistoryController");
+
+	$http({
+		method : "get",
+		url : '/boughthistory',
+		data : {}
+	}).success(function(data) {
+		console.log(data);
+		$scope.ads = data.ads;
+	}).error(function(error) {
+
+	});
+});
+
+app.controller("soldhistoryController", function($scope, $http) {
+	console.log("I am in soldhistoryController");
+
+	$http({
+		method : "get",
+		url : '/soldhistory',
+		data : {}
+	}).success(function(data) {
+		console.log(data);
+		$scope.ads = data.ads;
+	}).error(function(error) {
+
+	});
+});
+
+
 app.controller("cartController", function($scope, $http) {
 	console.log("I am in cartController");
 
@@ -369,20 +431,19 @@ app.controller('cart', function($scope, $http) {
 		})
 	}
 
-	$scope.removeAD = function(data) {
+	$scope.removeYourBidAD = function(data) {
 		var credentials = {
 			"pid" : data
 		}
 		console.log(credentials);
 		$http({
 			method : "POST",
-			url : '/removeAd',
+			url : '/removeYourBidAD',
 			data : credentials
 		}).success(function(data) {
 
 			if (data.statusCode == 200) {
-				console.log("REMOVED FROM CART");
-				// console.log(data);
+				console.log("REMOVED FROM BID ITEMS");
 			} else {
 				console.log("SOMETHING WENT WRONG");
 			}
