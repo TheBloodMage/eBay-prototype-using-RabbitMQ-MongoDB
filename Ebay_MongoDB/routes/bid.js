@@ -4,18 +4,19 @@ var mongoURL = "mongodb://localhost:27017/EbayDatabaseMongoDB";
 var ObjectId = require('mongodb').ObjectID;
 
 setInterval(function(){
-	//console.log('inside new setInterval');
+	console.log('inside new setInterval');
 	
 	 var currentTime = Math.floor(Date.now() / 1000);
 	 
 	 
 		mongo.connect(mongoURL, function() {
 
+			console.log('Connected to mongo insode setInterval bid at: ' + mongoURL);
 			var collection_bid = mongo.collection('bid');
 			var collection_bought = mongo.collection('bought');	
 			
 			collection_bid.find({
-				session_end_time : {$lte : currentTime}
+				session_end_time : {$gte : currentTime}
 			}).toArray(function(err, result){
 				
 				var length = result.length;

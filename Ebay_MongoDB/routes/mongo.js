@@ -10,7 +10,7 @@ exports.connect = function(url, callback){
       if (err) { throw new Error('Could not connect: '+err); }
       db = _db;
       connected = true;
-      //console.log(connected +" is connected?");
+      console.log(connected +" is connected?");
       callback(db);
     });
 };

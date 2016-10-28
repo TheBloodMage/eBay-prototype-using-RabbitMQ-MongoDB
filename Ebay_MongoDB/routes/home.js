@@ -131,7 +131,6 @@ exports.afterSignIn = function(req, res) {
 	mongo.connect(mongoURL, function() {
 		console.log('Connected to mongo at: ' + mongoURL);
 		var coll = mongo.collection('login');
-		var collection_profile = mongo.collection('profile');
 
 		coll.findOne({
 			username : username
@@ -158,53 +157,6 @@ exports.afterSignIn = function(req, res) {
 					};
 					res.send(json_responses);
 				}
-				
-			} else {
-				console.log("returned false");
-				json_responses = {
-					"statusCode" : 401
-				};
-				res.send(json_responses);
-			}
-		});
-		
-		collection_profile.findOne({
-			username : username
-		},
-		function(err, user) {
-			if (user) {
-				var currentlogintime = user.currentlogintime;
-				
-				collection_profile.update({
-					username : username
-				}, {
-					$set : {
-						logintime : currentlogintime,
-						currentlogintime : dt
-					}
-				},
-
-				function(err, user) {
-					if (user) {
-						json_responses = {
-							"statusCode" : 200
-						};
-						res.send(json_responses);
-
-					} else {
-						console.log("returned false");
-						json_responses = {
-							"statusCode" : 401
-						};
-						res.send(json_responses);
-					}
-				});
-				
-				json_responses = {
-					"statusCode" : 200
-				};
-				res.send(json_responses);
-
 			} else {
 				console.log("returned false");
 				json_responses = {
@@ -456,96 +408,6 @@ exports.managesellitems = function(req, res) {
 
 }
 
-exports.managebiditems = function(req, res) {
-
-	console.log("inside managebiditems");
-	var username = req.session.username;
-
-	mongo.connect(mongoURL, function() {
-
-		console.log('Connected to mongo inside managebiditems at: ' + mongoURL);
-
-		var collection_bid = mongo.collection('bid');
-		var json_response;
-
-		collection_bid.find({
-			username : {
-				$eq : username
-			}
-		}).toArray(function(err, items) {
-
-			json_response = {
-				"ads" : items
-			};
-			console.log(json_response);
-			res.send(json_response);
-
-		});
-	});
-
-}
-
-exports.boughthistory = function(req, res) {
-
-	console.log("inside managebiditems");
-	var username = req.session.username;
-
-	mongo.connect(mongoURL, function() {
-
-		console.log('Connected to mongo inside managebiditems at: ' + mongoURL);
-
-		var collection_bought = mongo.collection('bought');
-		var json_response;
-
-		collection_bought.find({
-			bought_product_owner : {
-				$eq : username
-			}
-		}).toArray(function(err, items) {
-
-			json_response = {
-				"ads" : items
-			};
-			console.log(json_response);
-			res.send(json_response);
-
-		});
-	});
-
-}
-
-
-exports.soldhistory = function(req, res) {
-
-	console.log("inside soldhistory");
-	var username = req.session.username;
-
-	mongo.connect(mongoURL, function() {
-
-		console.log('Connected to mongo inside soldhistory at: ' + mongoURL);
-
-		var collection_bought = mongo.collection('bought');
-		var json_response;
-
-		collection_bought.find({
-			bought_product_original_owner : {
-				$eq : username
-			}
-		}).toArray(function(err, items) {
-
-			json_response = {
-				"ads" : items
-			};
-			console.log(json_response);
-			res.send(json_response);
-
-		});
-	});
-
-}
-
-
-
 exports.cart = function(req, res) {
 
 	var product_id = req.param("pid");
@@ -566,7 +428,6 @@ exports.cart = function(req, res) {
 				var product_name = user.product_name;
 				var product_price = user.product_price;
 				var product_desc = user.product_desc;
-				var tot_product = user.tot_product;
 
 				console.log("product_name: " + product_name);
 				console.log("product_price: " + product_price);
@@ -579,30 +440,6 @@ exports.cart = function(req, res) {
 					product_desc : product_desc
 
 				}, function(err, user) {
-					if (user) {
-						json_responses = {
-							"statusCode" : 200
-						};
-						res.send(json_responses);
-
-					} else {
-						console.log("returned false");
-						json_responses = {
-							"statusCode" : 401
-						};
-						res.send(json_responses);
-					}
-				});
-				
-				collection_products.update({
-					_id : ObjectId(product_id)
-				}, {
-					$set : {
-						tot_product : tot_product - 1
-					}
-				},
-
-				function(err, user) {
 					if (user) {
 						json_responses = {
 							"statusCode" : 200
@@ -645,13 +482,10 @@ exports.bid = function(req, res) {
 			if (user) {
 				var current_highest_bid = user.current_highest_bid;
 
-				console.log("here");
 				console.log("current_highest_bid: " + current_highest_bid);
 				console.log("product_bid: " + product_bid);
 
-				if (parseInt(product_bid) > parseInt(current_highest_bid)) {
-					console.log("current_highest_bid: " + current_highest_bid);
-					console.log("product_bid: " + product_bid);
+				if (product_bid > current_highest_bid) {
 					collection_bid.update({
 						_id : ObjectId(product_id)
 					}, {
@@ -725,8 +559,6 @@ exports.removeCart = function(req, res) {
 		console.log('Connected to mongo at: ' + mongoURL);
 
 		var collection_cart = mongo.collection('cart');
-		var collection_products = mongo.collection('products');
-		
 		var json_response;
 
 		collection_cart.remove({
@@ -753,7 +585,7 @@ exports.submitBid = function(req, res) {
 	var username = req.session.username;
 	var sessionStartTime = Math.floor(Date.now() / 1000);
 	//number of seconds in 4 days are 345600
-	var sessionEndTime = sessionStartTime + 300;
+	var sessionEndTime = sessionStartTime + 345600;
 	
 
 	console.log("product_name: " + product_name);
@@ -963,36 +795,7 @@ exports.getAllBoughtProducts = function(req, res) {
 	}, getAllUsers);
 }
 
-exports.removeYourBidAD = function(req, res) {
-	
-	console.log("inside removeYourBidAD");
-	var username = req.session.username;
-	var product_id = req.param("pid");
-	
-	mongo.connect(mongoURL, function() {
-
-		console.log('Connected to mongo at: ' + mongoURL);
-
-		var collection_bid = mongo.collection('bid');
-		var json_response;
-
-		collection_bid.remove({
-			_id : {
-				$eq : ObjectId(product_id)
-			}
-		}), (function(err, items) {
-
-			json_response = {
-				"carts" : items
-			};
-			console.log(json_response);
-			res.send(json_response);
-
-		});
-	});
-	
-	
-	/*
+exports.removeAd = function(req, res) {
 
 	var insertUser = "DELETE FROM products WHERE username='"
 			+ req.session.username + "' and pid =" + req.param("pid");
@@ -1023,7 +826,7 @@ exports.removeYourBidAD = function(req, res) {
 			}
 		}
 	}, insertUser);
-*/};
+};
 
 exports.calculate = function(req, res) {
 

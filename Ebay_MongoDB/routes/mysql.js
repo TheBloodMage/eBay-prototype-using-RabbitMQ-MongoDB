@@ -8,10 +8,10 @@ var cntnQueue = [];
 
 var createConnectionPool = function(numberOfConnection){
 	var conn;
-	//console.log("creating my own connection");
+	console.log("creating my own connection");
 	
 	for(var count=0; count < numberOfConnection; count++){
-		//console.log("creating my own connection");
+		console.log("creating my own connection");
 		
 		conn = mysql.createConnection({
 			host : 'localhost',
@@ -45,7 +45,7 @@ var getConnection = function(callback){
 }
 
 setInterval(function(){
-	//console.log('inside setInterval')
+	console.log('inside setInterval')
 	if(cntnStack.length > 0){
 		if(cntnQueue.length > 0){
 			console.log('removing the connection from the queue');
@@ -62,12 +62,12 @@ createConnectionPool(numberOfConnection);
 
 exports.fetchData = function(callback, sqlQuery ) {
 
-	//console.log("SQL Query inside fetchData:" + sqlQuery);
+	console.log("SQL Query inside fetchData:" + sqlQuery);
 	
 	getConnection(function(err, connection) {
 		
 		connection.query(sqlQuery, function(err, result) {
-			//console.log("Executing the Query");
+			console.log("Executing the Query");
 			if (err) {
 				throw (err);
 			}
