@@ -1,11 +1,31 @@
-var ejs = require('ejs');
-var mongo = require("./mongo");
-var mongoURL = "mongodb://localhost:27017/EbayDatabaseMongoDB";
-var ObjectId = require('mongodb').ObjectID;
+var ejs 	= require('ejs');
+var mongo	= require("./mongo");
+var ObjectId= require('mongodb').ObjectID;
+
+var winston = require('winston');
+var fs 		= require('fs');
+var logDir	= 'log';
+var env 	= process.env.NODE_ENV || 'development';
+
+var mongoURL= "mongodb://localhost:27017/EbayDatabaseMongoDB";
+
+
+var tsFormat = (new Date()).toLocaleTimeString();
+var logger = new (winston.Logger)({
+  transports: [
+    new (winston.transports.File)({
+      filename: 'log/bid.log',
+      timestamp: tsFormat,
+      level: env === 'development' ? 'debug' : 'info'
+    })
+  ]
+});
+logger.info('Hello bid');
+logger.warn('Warning bid');
 
 setInterval(function(){
 	//console.log('inside new setInterval');
-	
+	logger.debug('inside bid');
 	 var currentTime = Math.floor(Date.now() / 1000);
 	 
 	 
@@ -51,9 +71,11 @@ setInterval(function(){
 					}, function(err, user) {
 						if (user) {
 							console.log("SUCCESS!");
+							logger.debug('bid completed');
 
 						} else {
 							console.log("FAILURE!");
+							logger.debug('bid failed');
 						}
 					});
 				    
@@ -63,9 +85,11 @@ setInterval(function(){
 					}, function(err, user) {
 						if (user) {
 							console.log("SUCCESS!");
+							logger.debug('bid removed from bid table');
 
 						} else {
 							console.log("FAILURE!");
+							logger.debug('bid removal from bid table failed');
 						}
 					});
 					

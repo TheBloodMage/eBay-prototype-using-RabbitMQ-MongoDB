@@ -1,27 +1,44 @@
-var passport = require('passport'),
-    localStrategies = require('passport-local'),
-    User = require('../models/User');
+/**
+
+ */
+var passport 		= require("passport");
+var LocalStrategy 	= require("passport-local").Strategy;
+var loginDatabase 	= "mongodb://localhost:27017/EbayDatabaseMongoDB";
+var mongo 			= require('./mongo');
+
+module.exports = function(passport) {
+    passport.use('login', new LocalStrategy(function(username, password, done) {
+
+        mongo.connect(loginDatabase, function(connection) {
+
+            var loginCollection = mongo.connectToCollection('login', connection);
+            var whereParams = {
+                username:username,
+                password:password
+            }
+
+            process.nextTick(function(){
+                loginCollection.findOne(whereParams, function(error, user) {
+
+                    if(error) {
+                        return done(err);
+                    }
+
+                    if(!user) {
+                        return done(null, false);
+                    }
+
+                    if(user.password != password) {
+                        done(null, false);
+                    }
+
+                    connection.close();
+                    console.log(user.username);
+                    done(null, user);
+                });
+            });
+        });
+    }));
+}
 
 
-passport.serializeUser(function(user, done) {
-  done(null, user._id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(new localStrategies({usernameField: 'email'},function(email, password, done){
-  User.findOne({email: email}, function(err, user){
-    if(err)
-      return err;
-    user.comparePassword(password, function(err, isMatch){
-      if(isMatch)
-        return done(null,user);
-      else
-        return done(null,false,{message: "Invalid password and email"});
-    });
-  });
-}))

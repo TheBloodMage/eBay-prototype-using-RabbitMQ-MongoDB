@@ -1,7 +1,107 @@
-var ejs = require("ejs");
-var mongo = require("./mongo");
-var ObjectId = require('mongodb').ObjectID;
-var mongoURL = "mongodb://localhost:27017/EbayDatabaseMongoDB";
+var ejs 		= require("ejs");
+var mongo 		= require("./mongo");
+var ObjectId 	= require('mongodb').ObjectID;
+var mongoURL 	= "mongodb://localhost:27017/EbayDatabaseMongoDB";
+
+exports.handle_register_new_user_queue_request = function (msg, callback) {
+
+	var json_responses = {};
+	console.log("IN handle_register_new_user_queue_request:");
+
+	var saltRounds 			= msg.saltRounds;
+	var myPlaintextPassword = msg.myPlaintextPassword;
+	var salt 				= msg.salt;
+	var hash 				= msg.hash;
+	var dt					= msg.dt;
+	var first_name 			= msg.first_name;
+	var last_name 			= msg.last_name;
+	var inputUsername 		= msg.inputUsername;
+	var inputPassword 		= msg.inputPassword;
+
+	console.log("LISTENING TO handle_register_new_user_queue_request WITH msg_payload AS: ");
+	console.log(msg);
+	
+	mongo.connect(mongoURL, function() {
+		console.log('CONNECTED TO MONGO IN handle_register_new_user_queue_request');
+		
+		var collection_login 	= mongo.collection('login');
+		var collection_profile 	= mongo.collection('profile');
+		var json_responses;
+
+		collection_login.findOne({
+			username : inputUsername
+		}, function(err, user) {
+			if (user) {
+				console.log("USER ALREADY EXISTS");
+				
+				json_responses = {
+					"statusCode" : 402
+				};
+				callback(null, json_responses);
+			} else {
+				collection_login.insert({
+					username : inputUsername,
+					password : hash,
+					fname : first_name,
+					lname : last_name,
+					logintime : dt,
+					currentlogintime : dt
+
+				}, function(err, user) {
+					if (user) {
+						
+						json_responses = {
+							"statusCode" : 200
+						};
+						callback(null, json_responses);
+
+					} else {
+						console.log("RETURNED FALSE");
+						
+						json_responses = {
+							"statusCode" : 401
+						};
+						callback(null, json_responses);
+					}
+				});
+
+				collection_profile.insert({
+					username 	: inputUsername,
+					password 	: hash,
+					fname 		: first_name,
+					lname 		: last_name,
+					logintime 	: dt,
+					currentlogintime : dt,
+					birthday 	: "",
+					ebay_handle : "",
+					contact_info: "",
+					location 	: ""
+
+				}, function(err, user) {
+					if (user) {
+						
+						json_responses = {
+							"statusCode" : 200
+						};
+						callback(null, json_responses);
+
+					} else {
+						console.log("RETURNED FALSE");
+						
+						json_responses = {
+							"statusCode" : 401
+						};
+						callback(null, json_responses);
+					}
+				});
+			}
+
+		});
+
+	});
+
+};
+
 
 exports.handle_profile_queue_request = function (msg, callback) {
 
@@ -131,11 +231,13 @@ exports.handle_get_all_products_queue_request = function (msg, callback) {
 
 		var collection_products = mongo.collection('products');
 		var json_response = {};
-
-		collection_products.find({
-			username : {
-				$ne : username
-			}
+		
+		collection_products.find({ 
+			$and :
+			[
+			 { username : { $ne : username } },
+			 { tot_product : {$ne : 0 } } 
+			]
 		}).toArray(function(err, items) {
 
 			json_response = {
@@ -381,6 +483,7 @@ exports.handle_cart_queue_request = function (msg, callback) {
 				var product_price = user.product_price;
 				var product_desc  = user.product_desc;
 				var tot_product   = user.tot_product;
+				var product_id	  = user._id;
 
 				console.log("product_name: " + product_name);
 				console.log("product_price: " + product_price);
@@ -388,9 +491,11 @@ exports.handle_cart_queue_request = function (msg, callback) {
 
 				collection_cart.insert({
 					username : username,
-					product_name : product_name,
+					product_name  : product_name,
 					product_price : product_price,
-					product_desc : product_desc
+					product_desc  : product_desc,
+					tot_product	  : tot_product - 1,
+					product_id 	  : product_id
 
 				}, function(err, user) {
 					if (user) {
@@ -546,6 +651,44 @@ exports.handle_remove_cart_queue_request = function (msg, callback) {
 		var collection_products = mongo.collection('products');
 		
 		var json_response;
+		
+		
+		collection_cart.findOne({
+			_id : {
+				$eq : ObjectId(product_id)
+			}
+		}, function(err, user) {
+			if (user) {
+
+				var product_idd	= user.product_id;
+				var tot_product = user.tot_product;
+				console.log('ghanat wajva');
+				
+				collection_products.update({
+					_id : ObjectId(product_idd)
+				}, {
+					$set : {
+						tot_product : tot_product + 1
+					}
+				},
+
+				function(err, user) {
+					if (user) {
+						json_responses = {
+							"statusCode" : 200
+						};
+						callback(null, json_responses);
+
+					} else {
+						console.log("returned false");
+						json_responses = {
+							"statusCode" : 401
+						};
+						callback(null, json_responses);
+					}
+				});
+			}
+		});
 
 		collection_cart.remove({
 			_id : {

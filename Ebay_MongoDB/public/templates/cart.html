@@ -85,19 +85,30 @@
 					<div class="form-group">
 						<label class="col-sm-2 control-label" for="cvv">Card CVV</label>
 						<div class="col-sm-3">
-							<input type="text" class="form-control" name="cvv" id="cvv"
-								placeholder="Security Code">
+							<input type="text" class="form-control" ng-model="cvv" name="cvv"
+								id="cvv" placeholder="Security Code">
 						</div>
 					</div>
 				</fieldset>
 			</form>
 		</div>
 
-		<a href="#payment">
-			<button name="Checkout And Pay" ng-click="money(cart.pid)"
-				type="submit" class="btn btn-primary">Checkout And Pay</button>
+		<a>
+			<button name="Checkout And Pay" ng-click="payment(card_number, cvv)"
+				type="submit" class="btn btn-primary">PROCEED TO PAYMENT AND CHECKOUT</button>
 		</a>
 
+		<div class="alert alert-danger" ng-hide="invalid_card_number">
+			<strong>Entered Card Number Is Invalid</strong>
+		</div>
+
+		<div class="alert alert-danger" ng-hide="invalid_cvv">
+			<strong>Entered CVV is not three digit</strong>
+		</div>
+
+		<div class="alert alert-danger" ng-hide="empty">
+			<strong>Something is empty</strong>
+		</div>
 
 	</div>
 </div>

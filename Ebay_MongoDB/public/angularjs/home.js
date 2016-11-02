@@ -86,7 +86,7 @@ app.controller('ebay', function($scope, $http) {
 		var credentials = {
 			"inputUsername" : $scope.inputUsername,
 			"inputPassword" : $scope.inputPassword
-		}
+		};
 
 		console.log(credentials);
 
@@ -96,7 +96,7 @@ app.controller('ebay', function($scope, $http) {
 			data : credentials
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
+			if (data.statusCode === 200) {
 				console.log("render the successful login page here");
 				window.location.assign("/successLogin");
 			} else {
@@ -104,8 +104,8 @@ app.controller('ebay', function($scope, $http) {
 				$scope.invalid_login = false;
 			}
 
-		})
-	}
+		});
+	};
 
 	$scope.getAllProducts = function() {
 		console.log("hey call is here");
@@ -142,9 +142,9 @@ app
 							"inputUsername" : $scope.inputUsername,
 							"inputPassword" : $scope.inputPassword,
 							"confirmPassword" : $scope.confirmPassword
-						}
+						};
 
-						if (RegisterCredentials.inputPassword == RegisterCredentials.confirmPassword) {
+						if (RegisterCredentials.inputPassword === RegisterCredentials.confirmPassword) {
 							console.log(RegisterCredentials.inputPassword);
 							console.log(RegisterCredentials.confirmPassword);
 							console.log("if both inserted passwords are equal");
@@ -154,12 +154,12 @@ app
 								data : RegisterCredentials
 							}).success(function(data) {
 
-								if (data.statusCode == 200) {
+								if (data.statusCode === 200) {
 									console.log("record inserted");
 									$scope.invalid_login = true;
 									$scope.already_exists = true;
 									$scope.valid_login = false;
-								} else if (data.statusCode == 401) {
+								} else if (data.statusCode === 401) {
 									console.log("invalid entry received");
 									$scope.valid_login = true;
 									$scope.already_exists = true;
@@ -170,11 +170,11 @@ app
 									$scope.invalid_login = true;
 									$scope.valid_login = true;
 								}
-							})
+							});
 						} else {
 							$scope.invalid_login = false;
 						}
-					}
+					};
 
 					$scope.updateProfile = function() {
 						var ProfileDetails = {
@@ -184,7 +184,7 @@ app
 							"ehandle" : $scope.euname,
 							"cinfo" : $scope.cinfo,
 							"location" : $scope.location
-						}
+						};
 						console.log(ProfileDetails);
 						$http({
 							method : "POST",
@@ -192,13 +192,13 @@ app
 							data : ProfileDetails
 						}).success(function(data) {
 
-							if (data.statusCode == 200) {
+							if (data.statusCode === 200) {
 								console.log("invalid entry received");
 							} else {
 								console.log("profile updated");
 							}
-						})
-					}
+						});
+					};
 
 					$scope.submitAd = function() {
 						var ProductDetails = {
@@ -206,7 +206,7 @@ app
 							"product_desc"	: $scope.product_desc,
 							"product_price" : $scope.product_price,
 							"tot_product"	: $scope.tot_product
-						}
+						};
 						console.log(ProductDetails);
 						$http({
 							method : "POST",
@@ -214,13 +214,13 @@ app
 							data : ProductDetails
 						}).success(function(data) {
 
-							if (data.statusCode == 200) {
+							if (data.statusCode === 200) {
 								console.log("invalid entry received");
 							} else {
 								console.log("record inserted");
 							}
-						})
-					}
+						});
+					};
 					
 					
 					$scope.submitBid = function() {
@@ -228,7 +228,7 @@ app
 							"product_name"	: $scope.product_name,
 							"product_desc"	: $scope.product_desc,
 							"product_price" : $scope.product_price
-						}
+						};
 						console.log(BidProductDetails);
 						$http({
 							method : "POST",
@@ -236,13 +236,13 @@ app
 							data : BidProductDetails
 						}).success(function(data) {
 
-							if (data.statusCode == 200) {
+							if (data.statusCode === 200) {
 								console.log("invalid entry received");
 							} else {
 								console.log("record inserted");
 							}
-						})
-					}
+						});
+					};
 
 				});
 
@@ -370,11 +370,13 @@ app.controller("cartController", function($scope, $http) {
 });
 
 app.controller('cart', function($scope, $http) {
-
+	$scope.invalid_card_number = true;
+	$scope.invalid_cvv = true;
+	$scope.empty = true;
 	$scope.addToCart = function(data) {
 		var credentials = {
 			"pid" : data
-		}
+		};
 		console.log(credentials);
 		$http({
 			method : "POST",
@@ -382,39 +384,59 @@ app.controller('cart', function($scope, $http) {
 			data : credentials
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
+			if (data.statusCode === 200) {
 				console.log("Added TO CArt");
 				// console.log(data);
 			} else {
 				console.log("SOMETHING WENT WRONG");
 			}
-		})
-	}
+		});
+	};
 
-	$scope.money = function(data) {
+	$scope.payment = function(card_number, cvv) {
+
 		var BoughtDetails = {
-			"pid" : data,
-			"card_number" : $scope.card_number
+			"card_number" : card_number,
+			"cvv"		  : cvv
+		};
+		
+		console.log(card_number.length);
+		
+		if(card_number.length !== 16){
+			$scope.invalid_card_number = false;
 		}
-		console.log("hi123 inside bought details" + BoughtDetails);
+		
+		if(cvv.length !== 3){
+			$scope.invalid_cvv = false;
+		}
+		
+		if(card_number.length === 0 || cvv.length === 0){
+			$scope.empty = true;
+		}
+		
 		$http({
 			method : "POST",
-			url : '/money',
+			url : '/payment',
 			data : BoughtDetails
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
-				console.log("invalid entry received");
-			} else {
+			if (data.statusCode === 200) {
 				console.log("record inserted");
+				$scope.invalid_card_number = true;
+				$scope.invalid_cvv = true;
+				$scope.empty = true;
+				window.location.assign("/successLogin2");
+			} else {
+				console.log("invalid entry received");
+				
 			}
-		})
-	}
+		});
+	};
 
 	$scope.removeFromCart = function(data) {
 		var credentials = {
 			"pid" : data
-		}
+		};
 		console.log("removeFromCart" + credentials);
 		$http({
 			method : "POST",
@@ -422,19 +444,19 @@ app.controller('cart', function($scope, $http) {
 			data : credentials
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
+			if (data.statusCode === 200) {
 				console.log("REMOVED FROM CART");
 				// console.log(data);
 			} else {
 				console.log("SOMETHING WENT WRONG");
 			}
-		})
-	}
+		});
+	};
 
 	$scope.removeYourBidAD = function(data) {
 		var credentials = {
 			"pid" : data
-		}
+		};
 		console.log(credentials);
 		$http({
 			method : "POST",
@@ -442,19 +464,19 @@ app.controller('cart', function($scope, $http) {
 			data : credentials
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
+			if (data.statusCode === 200) {
 				console.log("REMOVED FROM BID ITEMS");
 			} else {
 				console.log("SOMETHING WENT WRONG");
 			}
-		})
-	}
+		});
+	};
 	
 	$scope.placeYourBid = function(id, bid) {
 		var bid_credentials = {
 			"pid" : bid,
 			"product_bid" : id
-		}
+		};
 		console.log(bid_credentials);
 		$http({
 			method : "POST",
@@ -462,16 +484,14 @@ app.controller('cart', function($scope, $http) {
 			data : bid_credentials
 		}).success(function(data) {
 
-			if (data.statusCode == 200) {
+			if (data.statusCode === 200) {
 				console.log("Added TO BID");
 				// console.log(data);
 			} else {
 				console.log("SOMETHING WENT WRONG");
 			}
-		})
-	}
-	
-	
+		});
+	};
 });
 
 app.controller("BroughtProductsController", function($scope, $http) {

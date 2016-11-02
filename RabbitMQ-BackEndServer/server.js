@@ -1,12 +1,10 @@
 //super simple rpc server example
-var amqp = require('amqp');
-var util = require('util');
-
-var mongo = require("./services/mongo");
-var mongoSessionConnectURL = "mongodb://localhost:27017/RabbitMQDB";
-
-var login = require('./services/login');
+var amqp	= require('amqp');
+var util	= require('util');
+var mongo	= require("./services/mongo");
+var login	= require('./services/login');
 var ebay_services = require('./services/ebay_services');
+var mongoSessionConnectURL = "mongodb://localhost:27017/RabbitMQDB";
 
 var connection = amqp.createConnection({
 	host : '127.0.0.1'
@@ -45,6 +43,28 @@ connection.on('ready', function() {
 					contentEncoding : 'utf-8',
 					correlationId : m.correlationId
 				});
+			});
+		});
+	});
+	
+	connection.queue('register_new_user_queue', function(q) {
+
+		q.subscribe(function(message, headers, deliveryInfo, m) {
+
+			util.log(util.format(deliveryInfo.routingKey, message));
+			util.log("Message: " + JSON.stringify(message));
+			util.log("DeliveryInfo: " + JSON.stringify(deliveryInfo));
+
+			ebay_services.handle_register_new_user_queue_request(message, function(err,
+					res) {
+
+				// return index sent
+				connection.publish(m.replyTo, res, {
+					contentType : 'application/json',
+					contentEncoding : 'utf-8',
+					correlationId : m.correlationId
+				});
+
 			});
 		});
 	});
