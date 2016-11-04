@@ -7,6 +7,7 @@ var ObjectId 	= require('mongodb').ObjectID;
 var mq_client 	= require('../rpc/client');
 var winston 	= require('winston');
 var fs 			= require('fs');
+var passport 	= require("passport");
 var logDir		= 'log';
 var env 		= process.env.NODE_ENV || 'development';
 var mongoURL 	= "mongodb://localhost:27017/EbayDatabaseMongoDB";
@@ -78,117 +79,6 @@ exports.registerNewUser = function(req, res) {
 		else {
 			res.send(results);
 		}  
-	});
-};
-
-exports.afterSignIn = function(req, res) {
-
-	var dt = new Date();
-	var username = req.param("inputUsername");
-	var myPlaintextPassword = req.param("inputPassword");
-
-	mongo.connect(mongoURL, function() {
-		console.log('CONNECTED TO MONGO registerNewUser');
-		logger.info("CONNECTED TO MONGO registerNewUser");
-		var coll = mongo.collection('login');
-		var collection_profile = mongo.collection('profile');
-		var json_responses;
-		
-		coll.findOne({
-			username : username
-		}, function(err, user) {
-			if (user) {
-				var password = user.password;
-				
-				console.log("The password is: " + password);
-				console.log("The username is: " + username);
-				
-				logger.info(username);
-				logger.info(password);
-
-				if (bcrypt.compareSync(myPlaintextPassword, password)) {
-
-					// This way subsequent requests will know the user is logged
-					req.session.username = user.username;
-					console.log(req.session.username + " is the session");
-
-					json_responses = {
-						"statusCode" : 200
-					};
-					logger.warn(json_responses);
-					res.send(json_responses);
-				} else {
-					console.log("returned false");
-					logger.warn("returned false");
-					json_responses = {
-						"statusCode" : 401
-					};
-					logger.warn(json_responses);
-					res.send(json_responses);
-				}
-				
-			} else {
-				console.log("returned false");
-				logger.warn("returned false");
-				json_responses = {
-					"statusCode" : 401
-				};
-				logger.warn(json_responses);
-				res.send(json_responses);
-			}
-		});
-		
-		collection_profile.findOne({
-			username : username
-		},
-		function(err, user) {
-			if (user) {
-				var currentlogintime = user.currentlogintime;
-				
-				collection_profile.update({
-					username : username
-				}, {
-					$set : {
-						logintime : currentlogintime,
-						currentlogintime : dt
-					}
-				},
-
-				function(err, user) {
-					if (user) {
-						json_responses = {
-							"statusCode" : 200
-						};
-						logger.warn(json_responses);
-						res.send(json_responses);
-
-					} else {
-						console.log("returned false");
-						logger.warn("returned false");
-						json_responses = {
-							"statusCode" : 401
-						};
-						logger.warn(json_responses);
-						res.send(json_responses);
-					}
-				});
-				
-				json_responses = {
-					"statusCode" : 200
-				};
-				logger.warn(json_responses);
-				res.send(json_responses);
-
-			} else {
-				console.log("returned false");
-				logger.warn("returned false");
-				json_responses = {
-					"statusCode" : 401
-				};
-				logger.warn(json_responses);
-				res.send(json_responses);
-			}
-		});
 	});
 };
 

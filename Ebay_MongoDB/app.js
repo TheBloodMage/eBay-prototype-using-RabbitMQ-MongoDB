@@ -4,6 +4,9 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 var home = require('./routes/home');
+var LocalStrategy = require("passport-local").Strategy;
+var passport = require('passport');
+require('./routes/passportj')(passport);
 
 // URL for the sessions collections in mongoDB
 var mongoSessionConnectURL = "mongodb://localhost:27017/EbayDatabaseMongoDB";
@@ -15,7 +18,7 @@ var saltRounds = 10;
 
 var app = express();
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3001);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -42,6 +45,9 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // GET
 app.get('/', home.signin);
 app.get('/home', home.signin);
@@ -55,7 +61,6 @@ app.get('/getAllBids', home.getAllBids);
 app.get('/boughthistory', home.boughthistory);
 app.get('/soldhistory', home.soldhistory);
 // POST
-app.post('/afterSignIn', home.afterSignIn);
 app.post('/updateProfile', home.updateProfile);
 app.post('/submitAd', home.submitAd);
 app.post('/cart', home.cart);
@@ -66,6 +71,30 @@ app.post('/removeYourBidAD', home.removeYourBidAD);
 app.post('/registerNewUser', home.registerNewUser);
 app.post('/payment', home.payment);
 app.post('/logout', home.logout);
+
+app.post('/afterSignIn', function(req, res, next) {
+	console.log("hi");
+	console.log(req.body);
+	passport.authenticate('signin', function(err, user) {
+		if (err) {
+			console.log(err);
+		}
+		if (user) {
+			req.session.username = user.username;
+			console.log(req.session.username);
+			console.log('Before sending');
+			res.send({
+				'statusCode' : 200
+			});
+		} else {
+			res.send({
+				'statusCode' : 401
+			});
+		}
+
+		console.log("Session started in Passport");
+	})(req, res, next);
+});
 
 // connect to the mongo collection session and then createServer
 

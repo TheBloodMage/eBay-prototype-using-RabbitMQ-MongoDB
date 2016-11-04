@@ -84,8 +84,8 @@ app.controller('ebay', function($scope, $http) {
 		console.log("Sign in button clicked");
 
 		var credentials = {
-			"inputUsername" : $scope.inputUsername,
-			"inputPassword" : $scope.inputPassword
+			"username" : $scope.inputUsername,
+			"password" : $scope.inputPassword
 		};
 
 		console.log(credentials);
@@ -425,7 +425,6 @@ app.controller('cart', function($scope, $http) {
 				$scope.invalid_card_number = true;
 				$scope.invalid_cvv = true;
 				$scope.empty = true;
-				window.location.assign("/successLogin2");
 			} else {
 				console.log("invalid entry received");
 				

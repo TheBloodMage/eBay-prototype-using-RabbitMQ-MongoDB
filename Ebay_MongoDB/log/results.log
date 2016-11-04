@@ -565,3 +565,203 @@
 {"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T09:55:13.158Z"}
 {"level":"info","message":"ADDING A POST REQUEST ON payment_queue QUEUE WITH msg_payload as: ","timestamp":"2016-11-02T09:55:20.447Z"}
 {"username":"nachiket@gmail.com","card_number":"1111111111111111","level":"info","message":"","timestamp":"2016-11-02T09:55:20.447Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-02T23:30:27.563Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-02T23:30:37.433Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-02T23:30:37.516Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-02T23:30:37.516Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:30:37.604Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:30:37.611Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:30:37.613Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:30:37.639Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON get_all_products_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:30:41.205Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:30:41.205Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON cart_queue QUEUE WITH msg_payload as:","timestamp":"2016-11-02T23:30:44.731Z"}
+{"product_id":"58185234903d453310a36966","username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:30:44.731Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:30:46.248Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON get_all_products_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:30:46.587Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:30:46.587Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON your_cart_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:30:51.074Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:30:51.074Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:30:53.415Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON your_cart_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:30:53.732Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:30:53.732Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON remove_cart_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:31:01.887Z"}
+{"username":"nachiket@gmail.com","product_id":"5819b3289b3ace01e4edb905","level":"info","message":"","timestamp":"2016-11-02T23:31:01.888Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:31:04.831Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON your_cart_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:31:05.388Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:31:05.388Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON get_all_products_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:31:07.842Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:31:07.842Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:31:09.980Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON get_all_products_queue WITH msg_payload AS: ","timestamp":"2016-11-02T23:31:10.283Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:31:10.283Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-02T23:31:18.089Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-02T23:31:18.100Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-02T23:31:43.370Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-02T23:31:43.371Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-02T23:31:43.371Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:31:43.459Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:31:43.460Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:31:43.462Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:31:43.467Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-02T23:35:58.351Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-02T23:35:58.359Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON register_new_user_queue QUEUE WITH msg_payload as:","timestamp":"2016-11-02T23:36:56.468Z"}
+{"saltRounds":10,"myPlaintextPassword":"asdf","salt":"$2a$10$t9lWkM1XTwmrbilvTsLq3u","hash":"$2a$10$rxpwsxjyAC6qvgoaH4jxJuS8qWph/IGxIh7I1DL7nSQahJaMUucX2","dt":"2016-11-02T23:36:56.379Z","first_name":"Test","last_name":"Test","inputUsername":"test@gmail.com","inputPassword":"$2a$10$rxpwsxjyAC6qvgoaH4jxJuS8qWph/IGxIh7I1DL7nSQahJaMUucX2","level":"info","message":"","timestamp":"2016-11-02T23:36:56.468Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-02T23:37:05.863Z"}
+{"level":"info","message":"test@gmail.com","timestamp":"2016-11-02T23:37:05.864Z"}
+{"level":"info","message":"$2a$10$rxpwsxjyAC6qvgoaH4jxJuS8qWph/IGxIh7I1DL7nSQahJaMUucX2","timestamp":"2016-11-02T23:37:05.864Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:37:05.952Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:37:05.955Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:37:05.956Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:37:05.961Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-02T23:37:11.134Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-02T23:37:11.141Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-02T23:43:38.443Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON register_new_user_queue QUEUE WITH msg_payload as:","timestamp":"2016-11-02T23:44:55.790Z"}
+{"saltRounds":10,"myPlaintextPassword":"asdf","salt":"$2a$10$iKcFdU77iC63y4A6JkH0M.","hash":"$2a$10$NICXpsVTmohDw9wqptn8ZuHwCneDr5mBydZOZa7LyNEIwtQRWghqa","dt":"2016-11-02T23:44:55.702Z","first_name":"Test","last_name":"Test","inputUsername":"test@gmail.com","inputPassword":"$2a$10$NICXpsVTmohDw9wqptn8ZuHwCneDr5mBydZOZa7LyNEIwtQRWghqa","level":"info","message":"","timestamp":"2016-11-02T23:44:55.790Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-02T23:45:07.830Z"}
+{"level":"info","message":"test@gmail.com","timestamp":"2016-11-02T23:45:07.831Z"}
+{"level":"info","message":"$2a$10$NICXpsVTmohDw9wqptn8ZuHwCneDr5mBydZOZa7LyNEIwtQRWghqa","timestamp":"2016-11-02T23:45:07.831Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:45:07.919Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:45:07.921Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-02T23:45:07.922Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-02T23:45:07.930Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-02T23:45:10.857Z"}
+{"username":"test@gmail.com","level":"info","message":"","timestamp":"2016-11-02T23:45:10.857Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:04:01.905Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:04:55.825Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:08:09.402Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:09:51.037Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:24:05.940Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T05:33:00.675Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T06:45:57.344Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T06:46:45.672Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T06:49:25.426Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T06:49:54.054Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:00:08.300Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:00:13.972Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:00:41.965Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:00:46.305Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:02:57.516Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:03:02.002Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:03:21.677Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:03:26.370Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:05:02.082Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:05:06.626Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:31:05.020Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:31:17.017Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-03T07:41:42.975Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-03T07:41:43.045Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-03T07:41:43.045Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-03T07:41:43.134Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-03T07:41:43.143Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-03T07:41:43.144Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-03T07:41:43.175Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-03T07:57:21.647Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:57:21.703Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:59:31.767Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T07:59:51.152Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:00:42.749Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:01:48.698Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:04:13.151Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:04:46.950Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:05:09.793Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:05:20.197Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:06:58.053Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:07:14.458Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:08:02.969Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:08:15.950Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:10:55.131Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-03T08:11:17.757Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:54:51.976Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-04T00:55:19.232Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-04T00:55:19.405Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-04T00:55:19.405Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:55:19.665Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:55:19.691Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:55:19.726Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T00:55:19.830Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T00:57:23.187Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:57:23.198Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-04T00:57:32.255Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-04T00:57:32.256Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-04T00:57:32.256Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:57:32.344Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:57:32.347Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:57:32.348Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T00:57:32.355Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T00:58:27.052Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:58:27.060Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:58:29.174Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-04T00:58:37.445Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-04T00:58:37.447Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-04T00:58:37.447Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:58:37.537Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:58:37.539Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:58:37.540Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T00:58:37.547Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T00:59:08.025Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:59:08.036Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-04T00:59:17.061Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-04T00:59:17.062Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-04T00:59:17.062Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:59:17.152Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:59:17.155Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T00:59:17.156Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T00:59:17.162Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T00:59:58.762Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T00:59:58.770Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:00:01.166Z"}
+{"level":"info","message":"CONNECTED TO MONGO registerNewUser","timestamp":"2016-11-04T01:00:10.964Z"}
+{"level":"info","message":"nachiket@gmail.com","timestamp":"2016-11-04T01:00:10.965Z"}
+{"level":"info","message":"$2a$10$T1Lvf7EqujG86FYybVghUuC7t1lJcfKzppfjV5g4Kke3sGef7nkZS","timestamp":"2016-11-04T01:00:10.965Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T01:00:11.054Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T01:00:11.057Z"}
+{"statusCode":200,"level":"warn","message":"","timestamp":"2016-11-04T01:00:11.058Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T01:00:11.073Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:09:32.758Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:09:45.349Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:32:48.217Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:32:54.951Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:34:39.518Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:36:15.012Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:36:45.441Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:38:26.348Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:41:21.219Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T01:44:24.182Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T02:12:25.795Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T02:14:19.360Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T02:21:53.349Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T04:35:44.422Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T05:58:36.222Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T05:59:10.967Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:10.967Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON get_all_products_queue WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:30.925Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:30.926Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON getAllBids WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:32.067Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:32.067Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON manage_sell_items_queue WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:36.286Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:36.286Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON manage_bid_items_queue WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:37.773Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:37.773Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON bought_history_queue WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:43.935Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:43.935Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON sold_history_queue WITH msg_payload AS: ","timestamp":"2016-11-04T05:59:44.958Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:44.959Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T05:59:47.929Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T05:59:47.929Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T06:00:06.204Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T06:00:06.204Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T06:01:10.968Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T06:01:10.968Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T06:05:52.743Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T06:05:52.763Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T06:06:40.172Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T06:06:43.271Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T06:06:43.271Z"}
+{"level":"info","message":"in destroy session function","timestamp":"2016-11-04T06:07:08.528Z"}
+{"level":"info","message":"successfully rendered the signin module","timestamp":"2016-11-04T06:07:08.537Z"}
+{"level":"info","message":"Checks before redirecting whether the session is valid ","timestamp":"2016-11-04T06:07:15.676Z"}
+{"level":"info","message":"ADDING A POST REQUEST ON profile_queue WITH msg_payload AS","timestamp":"2016-11-04T06:07:17.402Z"}
+{"username":"nachiket@gmail.com","level":"info","message":"","timestamp":"2016-11-04T06:07:17.402Z"}
