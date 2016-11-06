@@ -8,10 +8,10 @@ var request 	= require('request')
 
 describe('http tests', function() {
 
-	it('login should be with correct credentials', function(done) {
+	it('LOGIN SHOULD BE CORRECT WITH INPUT CREDENTIALS', function(done) {
 		request.post('http://localhost:3000/afterSignIn', {
 			form : {
-				inputUsername : 'nachiket@gmail.com',inputPassword:'12345'
+				username : 'nachiket@gmail.com',password:'1234'
 			}
 		}, function(error, response, body) {
 			assert.equal(200, response.statusCode);
@@ -19,7 +19,7 @@ describe('http tests', function() {
 		});
 	});
 
-	it('check ad additions', function(done) {
+	it('CHECK ADD BID CORRECT', function(done) {
 		request.post('http://localhost:3000/afterSignIn', {
 			form : {
 				product_name : 'test',product_id:'65',
@@ -32,7 +32,7 @@ describe('http tests', function() {
 		});
 	});
 	
-	it('check cart additions is correct', function(done) {
+	it('CHECK CART ADDITION IS CORRECT', function(done) {
 		request.post('http://localhost:3000/cart', {
 			form : {
 				pid : '90'
@@ -43,34 +43,34 @@ describe('http tests', function() {
 		});
 	});
 	
-    it('Checks if get All products is correct', function(done) {
+    it('CHECK IF PRODUCTS ARE RENDERED CORRECT', function(done) {
         request.post(
             'http://localhost:3000/submitAd',
             { form: { } },
             function (error, response, body) {
-                assert.equal(200, 200);
+                assert.equal(200, response.statusCode);
                 done();
             }
         );
     });
     
-    it('Checks if profile is correct', function(done) {
+    it('CHECK IF PROFILE INFO IS CORRECT', function(done) {
         request.post(
             'http://localhost:3000/profile',
             { form: { } },
             function (error, response, body) {
-                assert.equal(200, 200);
+                assert.equal(200, response.statusCode);
                 done();
             }
         );
     });
     
-    it('Checks if your cart is correct', function(done) {
+    it('CHECK IF CART IS RENDERED CORRECT', function(done) {
         request.post(
             'http://localhost:3000/yourCart',
             { form: { } },
             function (error, response, body) {
-                assert.equal(200, 200);
+                assert.equal(200, response.statusCode);
                 done();
             }
         );
