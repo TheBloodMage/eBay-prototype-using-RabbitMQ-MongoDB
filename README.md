@@ -1,2 +1,2 @@
-# CMPE_273_Ebay_Lab_2
+# eBay-prototype-using-RabbitMQ-MongoDB
 Ebay Marketplace Application using RabbitMQ and MongoDB
